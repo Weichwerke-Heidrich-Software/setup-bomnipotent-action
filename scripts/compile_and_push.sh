@@ -15,7 +15,7 @@ ncc build src/index.js -o dist --license licenses.txt
 
 commig_message=$1
 if [ -z "$commig_message" ]; then
-    default_message="Update compiled files"
+    default_message="Updating compiled files."
     echo "No commit message provided. Shall I use a default message \"$default_message\"?"
     read -p "Enter 'y' for yes or 'n' for no: " answer
     if [ "$answer" == "y" ]; then

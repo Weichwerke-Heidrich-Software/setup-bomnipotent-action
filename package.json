@@ -2,15 +2,34 @@
   "name": "setup-bomnipotent-action",
   "version": "0.1.0",
   "description": "GitHub action to setup BOMnipotent Client.",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "Weichwerke Heidrich Software",
-  "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.1"
-  }
+  },
+  "devDependencies": {
+    "typescript": "^4.5.4"
+  },
+  "engines": {
+    "node": ">=12.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Weichwerke-Heidrich-Software/setup-bomnipotent-action.git"
+  },
+  "keywords": [
+    "github",
+    "action",
+    "setup"
+  ],
+  "author": "Weichwerke Heidrich Software",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Weichwerke-Heidrich-Software/setup-bomnipotent-action/issues"
+  },
+  "homepage": "https://www.bomnipotent.de"
 }
