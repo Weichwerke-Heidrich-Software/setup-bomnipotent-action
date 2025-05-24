@@ -37,6 +37,11 @@ function storeSessionData(execPath: string): void {
     dataToStore += `--domain=${domain} `;
   }
 
+  const user = core.getInput('user');
+  if (user) {
+    dataToStore += `--email=${user} `;
+  }
+
   if (dataToStore === '') {
     console.log('No session data to store.');
     return;

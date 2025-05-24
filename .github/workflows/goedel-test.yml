@@ -15,6 +15,7 @@ jobs:
         uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@storing-session-data
         with:
           domain: 'https://bomnipotent.wwh-soft.com'
+          user: 'wwh_soft_robot'
 
       - name: Display the session data
         run: |

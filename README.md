@@ -13,6 +13,7 @@ To use this action, you need to specify the version of the software you want to 
 ### Inputs
 
 - `domain`: *(Optional but recommended)* The domain of the BOMnipotent Server instance you primarily which to talk to.
+- `user`: *(Optional)* The username of a robot user registered at the BOMnipotent Server.
 - `version`: *(Optional and not recommended)* The version of the software to install. Defaults to 'latest'.
 
 ## Example Usage
@@ -32,16 +33,22 @@ jobs:
       - name: Install BOMnipotent Client
         uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
         with:
-          version: '0.5.0' # Omit this argument to use the latest version
+          domain: 'https://bomnipotent.<target-domain>'
+          user: 'CI-CD@<your-domain>'
+          version: '0.5.0' # Omit this argument to use the latest version (recommended)
 
-      - name: Display the BOMnipotent Client version
+      - name: Use BOMnipotent Client in subsequent actions
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             echo "On Windows, the executable ends on .exe."
             bomnipotent_client.exe --version
+            bomnipotent_client.exe session status
+            bomnipotent_client.exe health
           else
             echo "On Unix, the file is already marked as executable."
             bomnipotent_client --version
+            bomnipotent_client session status
+            bomnipotent_client health
           fi
         shell: bash
 ```
