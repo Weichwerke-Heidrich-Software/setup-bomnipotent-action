@@ -13,6 +13,11 @@ inputs:
       Specify the username of a robot user registered at the BOMnipotent Server you are targeting.
     required: false
     default: ''
+  verify_session:
+    description: |-
+      If set to false, this skips the verification that the entered session data is valid.
+    required: false
+    default: 'true'
   version:
     description: |-
       Specify the version of BOMnipotent Client to download. If not specified, the latest version will be used.

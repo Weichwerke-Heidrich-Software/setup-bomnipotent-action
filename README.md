@@ -14,6 +14,7 @@ To use this action, you need to specify the version of the software you want to 
 
 - `domain`: *(Optional but recommended)* The domain of the BOMnipotent Server instance you primarily which to talk to.
 - `user`: *(Optional)* The username of a robot user registered at the BOMnipotent Server.
+- `verify_session`: *(Optional and not recommended)* If set to "false" (or some other string that is not "true"), this skips the verification that the entered session data is valid.
 - `version`: *(Optional and not recommended)* The version of the software to install. Defaults to 'latest'.
 
 ## Example Usage

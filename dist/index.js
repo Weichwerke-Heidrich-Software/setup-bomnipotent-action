@@ -28262,6 +28262,18 @@ async function persistClient(downloadPath, os) {
     core.addPath(stableDir);
     return stablePath;
 }
+function execCommand(command) {
+    (0, child_process_1.exec)(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}`);
+            process.exit(1);
+        }
+        if (stderr) {
+            console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}`);
+        }
+        console.log(`${stdout}`);
+    });
+}
 function storeSessionData(execPath) {
     let dataToStore = '';
     const domain = core.getInput('domain');
@@ -28277,16 +28289,17 @@ function storeSessionData(execPath) {
         return;
     }
     const command = `${execPath} ${dataToStore} session login`;
-    (0, child_process_1.exec)(command, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Sadly, BOMnipotent encountered an error:\n${error.message}`);
-            process.exit(1);
-        }
-        if (stderr) {
-            console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}`);
-        }
-        console.log(`${stdout}`);
-    });
+    execCommand(command);
+}
+function verifySession(execPath) {
+    const domain = core.getInput('domain');
+    if (!domain) {
+        console.log('No domain provided, skipping session verification.');
+        return;
+    }
+    const command = `${execPath} health`;
+    console.log(`Verifying session.`);
+    execCommand(command);
 }
 async function setupClient() {
     let versionToInstall = core.getInput('version');
@@ -28314,6 +28327,9 @@ async function setupClient() {
     const downloadPath = await toolcache.downloadTool(url);
     const execPath = await persistClient(downloadPath, os);
     storeSessionData(execPath);
+    if (core.getInput('verify_session') === 'true') {
+        verifySession(execPath);
+    }
 }
 async function run() {
     try {

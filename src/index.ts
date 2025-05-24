@@ -29,6 +29,19 @@ async function persistClient(downloadPath: string, os: string): Promise<string> 
   return stablePath;
 }
 
+function execCommand(command: string): void {
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}`);
+      process.exit(1);
+    }
+    if (stderr) {
+      console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}`);
+    }
+    console.log(`${stdout}`);
+  });
+}
+
 function storeSessionData(execPath: string): void {
   let dataToStore: string = '';
 
@@ -48,16 +61,18 @@ function storeSessionData(execPath: string): void {
   }
 
   const command: string = `${execPath} ${dataToStore} session login`;
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Sadly, BOMnipotent encountered an error:\n${error.message}`);
-      process.exit(1);
-    }
-    if (stderr) {
-      console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}`);
-    }
-    console.log(`${stdout}`);
-  });
+  execCommand(command);
+}
+
+function verifySession(execPath: string): void {
+  const domain = core.getInput('domain');
+  if (!domain) {
+    console.log('No domain provided, skipping session verification.');
+    return;
+  }
+  const command: string = `${execPath} health`;
+  console.log(`Verifying session.`);
+  execCommand(command);
 }
 
 async function setupClient(): Promise<void> {
@@ -86,6 +101,9 @@ async function setupClient(): Promise<void> {
 
   const execPath = await persistClient(downloadPath, os);
   storeSessionData(execPath);
+  if (core.getInput('verify_session') === 'true') {
+    verifySession(execPath);
+  }
 }
 
 async function run(): Promise<void> {
