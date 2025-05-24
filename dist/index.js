@@ -28265,7 +28265,7 @@ async function persistClient(downloadPath, os) {
 function execCommand(command) {
     try {
         const output = (0, child_process_1.execSync)(command, { stdio: 'inherit' });
-        console.log(`${output}`);
+        console.log(`Execution output:\n${output}`);
     }
     catch (error) {
         if (error instanceof Error) {
