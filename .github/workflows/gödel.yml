@@ -11,14 +11,14 @@ jobs:
     steps:
       - name: Setup latest version of BOMnipotent Client
         id: setup-latest
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-client@initial-functionality
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@initial-functionality
         
       - name: Display the latest installed version
         run: echo "The installed version is ${{ steps.setup-latest.outputs.version }}."
 
       - name: Setup specific version of BOMnipotent Client
         id: setup-specific
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-client@initial-functionality
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@initial-functionality
         with:
           version: '0.4.2'
 
