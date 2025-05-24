@@ -4,11 +4,6 @@ set -e
 
 cd "$(git rev-parse --show-toplevel)"
 
-if [ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]; then
-  echo "You must be on the 'main' branch to publish."
-  exit 1
-fi
-
 major_version=$(node -p "require('./package.json').version.split('.')[0]")
 major_version_tag="v$major_version"
 minor_version=$(node -p "require('./package.json').version.split('.')[1]")
@@ -16,8 +11,9 @@ minor_version_tag="v$major_version.$minor_version"
 patch_version=$(node -p "require('./package.json').version.split('.')[2]")
 patch_version_tag="v$major_version.$minor_version.$patch_version"
 
-action_path="Weichwerke-Heidrich-Software/setup-bomnipotent-action"
-for file in .github/workflows/goedel.yml README.md; do
+repo_name=$(basename "$(git rev-parse --show-toplevel)")
+action_path="Weichwerke-Heidrich-Software/$repo_name"
+for file in .github/workflows/*.yml README.md; do
     sed -i "s:$action_path@.*:$action_path@$major_version_tag:g" "$file"
 done
 
@@ -29,6 +25,11 @@ ncc build src/index.ts -o dist --license licenses.txt
 
 if ! git diff-index --quiet HEAD --ignore-space-at-eol --; then
   echo "You have uncommitted changes. Please commit or stash them before publishing."
+  exit 1
+fi
+
+if [ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]; then
+  echo "You must be on the 'main' branch to publish."
   exit 1
 fi
 
