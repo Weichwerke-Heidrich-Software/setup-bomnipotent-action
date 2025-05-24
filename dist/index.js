@@ -28233,22 +28233,29 @@ const toolcache = __importStar(__nccwpck_require__(4430));
 async function persistClient(downloadPath, os) {
     const runnerTemp = process.env['RUNNER_TEMP'];
     const stableDir = path.join(runnerTemp, 'bomnipotent');
-    let stablePath = path.join(stableDir, 'bomnipotent_client');
+    let stablePath;
     if (os === 'windows') {
         stablePath = path.join(stableDir, 'bomnipotent_client.exe');
     }
     else {
+        stablePath = path.join(stableDir, 'bomnipotent_client');
+    }
+    await io.mkdirP(stableDir);
+    console.log(`Moving client to: ${stablePath}`);
+    await io.cp(downloadPath, stablePath, { force: true });
+    if (os !== 'windows') {
         // On Unix systems, we need to make the binary executable
         fs.chmodSync(stablePath, 0o755);
     }
-    await io.mkdirP(stableDir);
-    await io.cp(downloadPath, stablePath, { force: true });
     console.log(`Adding "${stableDir}" to the PATH`);
     core.addPath(stableDir);
 }
 async function setupClient() {
-    const versionToInstall = core.getInput('version');
-    console.log(`Installing ${versionToInstall}!`);
+    let versionToInstall = core.getInput('version');
+    if (!versionToInstall.startsWith('v')) {
+        versionToInstall = `v${versionToInstall}`;
+    }
+    console.log(`Installing ${versionToInstall}.`);
     let os = process.platform;
     console.log(`Running on OS: ${os}`);
     if (os === 'linux') {
