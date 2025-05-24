@@ -3,6 +3,11 @@ description: |-
       Downloads and caches BOMnipotent Client, and adds it to the PATH.
 author: 'Weichwerke Heidrich Software'
 inputs:
+  domain:
+    description: |-
+      Specify the domain of the BOMnipotent Server to be stored. It can be overridden by command line arguments in later calls.
+    required: false
+    default: ''
   version:
     description: |-
       Specify the version of BOMnipotent Client to download. If not specified, the latest version will be used.

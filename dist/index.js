@@ -28235,6 +28235,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const child_process_1 = __nccwpck_require__(5317);
 const core = __importStar(__nccwpck_require__(8402));
 const fs = __importStar(__nccwpck_require__(9896));
 const io = __importStar(__nccwpck_require__(8192));
@@ -28259,6 +28260,29 @@ async function persistClient(downloadPath, os) {
     }
     console.log(`Adding "${stableDir}" to the PATH`);
     core.addPath(stableDir);
+    return stablePath;
+}
+function storeSessionData(execPath) {
+    let dataToStore = '';
+    const domain = core.getInput('domain');
+    if (domain) {
+        dataToStore += `--domain=${domain} `;
+    }
+    if (dataToStore === '') {
+        console.log('No session data to store.');
+        return;
+    }
+    const command = `${execPath} ${dataToStore} session login`;
+    (0, child_process_1.exec)(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Sadly, BOMnipotent encountered an error:\n${error.message}`);
+            process.exit(1);
+        }
+        if (stderr) {
+            console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}`);
+        }
+        console.log(`${stdout}`);
+    });
 }
 async function setupClient() {
     let versionToInstall = core.getInput('version');
@@ -28284,7 +28308,8 @@ async function setupClient() {
     const url = `https://www.bomnipotent.de/downloads/raw/${versionToInstall}/${os}/bomnipotent_client${extension}`;
     console.log(`Downloading from URL: ${url}`);
     const downloadPath = await toolcache.downloadTool(url);
-    await persistClient(downloadPath, os);
+    const execPath = await persistClient(downloadPath, os);
+    storeSessionData(execPath);
 }
 async function run() {
     try {

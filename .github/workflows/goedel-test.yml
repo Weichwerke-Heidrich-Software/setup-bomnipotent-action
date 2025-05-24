@@ -10,16 +10,18 @@ jobs:
 
     name: Running the BOMnipotent Client setup action
     steps:
-      - name: Setup latest version of BOMnipotent Client
+      - name: Setup latest version of BOMnipotent Client and store session data
         id: setup-latest
         uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@storing-session-data
+        with:
+          domain: 'https://bomnipotent.wwh-soft.com'
 
-      - name: Display the latest BOMnipotent Client version
+      - name: Display the session data
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            bomnipotent_client.exe --version
+            bomnipotent_client.exe session status
           else
-            bomnipotent_client --version
+            bomnipotent_client session status
           fi
         shell: bash
 
@@ -29,7 +31,7 @@ jobs:
         with:
           version: '0.4.2'
 
-      - name: Display the specific BOMnipotent Client version
+      - name: Display the BOMnipotent Client version
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             bomnipotent_client.exe --version

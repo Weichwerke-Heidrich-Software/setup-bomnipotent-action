@@ -12,7 +12,8 @@ To use this action, you need to specify the version of the software you want to 
 
 ### Inputs
 
-- `version`: The version of the software to install.
+- `domain`: *(Optional but recommended)* The domain of the BOMnipotent Server instance you primarily which to talk to.
+- `version`: *(Optional and not recommended)* The version of the software to install. Defaults to 'latest'.
 
 ## Example Usage
 
