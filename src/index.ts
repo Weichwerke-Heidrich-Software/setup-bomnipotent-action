@@ -31,8 +31,7 @@ async function persistClient(downloadPath: string, os: string): Promise<string> 
 
 function execCommand(command: string): void {
   try {
-    const output = execSync(command, { stdio: 'inherit' });
-    console.log(`Execution output:\n${output}`);
+    execSync(command, { stdio: 'inherit' });
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}`);
