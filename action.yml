@@ -8,13 +8,9 @@ inputs:
       Specify the version of BOMnipotent Client to download. If not specified, the latest version will be used.
     required: false
     default: 'latest'
-outputs:
-  version:
-    description: |-
-      Version of BOMnipotent Client that was installed.
 runs:
   using: 'node20'
-  main: 'src/index.js'
+  main: 'dist/index.js'
 branding:
   icon: 'triangle'
   color: 'orange'
