@@ -32,11 +32,11 @@ async function persistClient(downloadPath: string, os: string): Promise<string> 
 function execCommand(command: string): void {
   exec(command, (error, stdout, stderr) => {
     if (error) {
-      console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}`);
+      console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}\n${stderr}\n${stdout}`);
       process.exit(1);
     }
     if (stderr) {
-      console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}`);
+      console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}\n${stdout}`);
     }
     console.log(`${stdout}`);
   });
