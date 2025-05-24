@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install BOMnipotent Client
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v0
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
         with:
           version: '0.5.0' # Omit this argument to use the latest version
 

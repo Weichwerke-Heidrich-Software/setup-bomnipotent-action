@@ -17,7 +17,9 @@ patch_version=$(node -p "require('./package.json').version.split('.')[2]")
 patch_version_tag="v$major_version.$minor_version.$patch_version"
 
 action_path="Weichwerke-Heidrich-Software/setup-bomnipotent-action"
-sed -i "s:$action_path@.*:$action_path@$major_version_tag:g" .github/workflows/goedel.yml
+for file in .github/workflows/goedel.yml README.md; do
+    sed -i "s:$action_path@.*:$action_path@$major_version_tag:g" "$file"
+done
 
 echo "Updating package-lock.json."
 npm install
