@@ -1,0 +1,20 @@
+name: 'Setup BOMnipotent Client'
+description: |-
+      Downloads and caches BOMnipotent Client, and adds it to the PATH.
+author: 'Weichwerke Heidrich Software'
+inputs:
+  version:
+    description: |-
+      Specify the version of BOMnipotent Client to download. If not specified, the latest version will be used.
+    required: false
+    default: 'latest'
+outputs:
+  version:
+    description: |-
+      Version of BOMnipotent Client that was installed.
+runs:
+  using: 'node20'
+  main: 'src/index.js'
+branding:
+  icon: 'triangle'
+  color: 'orange'
