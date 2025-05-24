@@ -28250,8 +28250,6 @@ async function setupClient() {
     const clientPath = await toolcache.downloadTool(url);
     console.log(`Adding "${clientPath}" to the PATH`);
     core.addPath(clientPath);
-    // TODO: Actually install the version of the software here.
-    // core.setOutput("version", versionToInstall);
 }
 async function run() {
     try {

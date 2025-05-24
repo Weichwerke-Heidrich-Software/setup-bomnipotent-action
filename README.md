@@ -14,10 +14,6 @@ To use this action, you need to specify the version of the software you want to 
 
 - `version`: The version of the software to install.
 
-### Outputs
-
-- `version`: The version of the software that was installed.
-
 ## Example Usage
 
 ```yaml
@@ -36,6 +32,9 @@ jobs:
         uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v0
         with:
           version: '0.5.0' # Omit this argument to use the latest version
+
+      - name: Display the BOMnipotent Client version
+        run: bomnipotent_client --version
 ```
 
 ## License
