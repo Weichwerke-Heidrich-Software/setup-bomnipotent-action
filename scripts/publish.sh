@@ -25,7 +25,7 @@ npm install
 echo "Compiling the project."
 ncc build src/index.ts -o dist --license licenses.txt
 
-if ! git diff-index --quiet HEAD --; then
+if ! git diff-index --quiet HEAD --ignore-space-at-eol --; then
   echo "You have uncommitted changes. Please commit or stash them before publishing."
   exit 1
 fi
