@@ -28263,16 +28263,19 @@ async function persistClient(downloadPath, os) {
     return stablePath;
 }
 function execCommand(command) {
-    (0, child_process_1.exec)(command, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}\n${stderr}\n${stdout}`);
-            process.exit(1);
+    try {
+        const output = (0, child_process_1.execSync)(command, { stdio: 'inherit' });
+        console.log(`${output}`);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}`);
         }
-        if (stderr) {
-            console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}\n${stdout}`);
+        else {
+            console.error(`Sadly, BOMnipotent encountered a critical error:\n${String(error)}`);
         }
-        console.log(`${stdout}`);
-    });
+        process.exit(1);
+    }
 }
 function storeSessionData(execPath) {
     let dataToStore = '';

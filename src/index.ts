@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 import * as core from '@actions/core';
 import * as fs from 'fs';
 import * as io from '@actions/io';
@@ -30,16 +30,17 @@ async function persistClient(downloadPath: string, os: string): Promise<string> 
 }
 
 function execCommand(command: string): void {
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}\n${stderr}\n${stdout}`);
-      process.exit(1);
+  try {
+    const output = execSync(command, { stdio: 'inherit' });
+    console.log(`${output}`);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}`);
+    } else {
+      console.error(`Sadly, BOMnipotent encountered a critical error:\n${String(error)}`);
     }
-    if (stderr) {
-      console.error(`Sadly, BOMnipotent encountered an error:\n${stderr}\n${stdout}`);
-    }
-    console.log(`${stdout}`);
-  });
+    process.exit(1);
+  }
 }
 
 function storeSessionData(execPath: string): void {
