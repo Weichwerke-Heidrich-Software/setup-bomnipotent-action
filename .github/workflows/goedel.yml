@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Setup latest version of BOMnipotent Client
         id: setup-latest
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@installing-client
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@1
 
       - name: Display the latest BOMnipotent Client version
         run: |
@@ -25,7 +25,7 @@ jobs:
 
       - name: Setup specific version of BOMnipotent Client
         id: setup-specific
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@installing-client
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@1
         with:
           version: '0.4.2'
 
