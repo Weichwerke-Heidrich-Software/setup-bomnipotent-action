@@ -55,6 +55,15 @@ function storeSessionData(execPath: string): void {
     dataToStore += `--email=${user} `;
   }
 
+  const secret_key = core.getInput('secret_key');
+  if (secret_key) {
+    const runnerTemp = process.env['RUNNER_TEMP']!;
+    const stableDir = path.join(runnerTemp, 'bomnipotent');
+    const secretKeyPath = path.join(stableDir, 'secret.key');
+    fs.writeFileSync(secretKeyPath, secret_key);
+    dataToStore += `--secret-key=${secretKeyPath} `;
+  }
+
   if (dataToStore === '') {
     console.log('No session data to store.');
     return;
