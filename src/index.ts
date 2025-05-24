@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as toolcache from '@actions/tool-cache';
 
-try {
+async function setupClient(): Promise<void> {
   const versionToInstall: string = core.getInput('version');
   console.log(`Installing ${versionToInstall}!`);
 
@@ -20,13 +20,21 @@ try {
   const extension: string = os === 'windows' ? '.exe' : '';
   const url: string = `https://www.bomnipotent.de/downloads/raw/${versionToInstall}/${os}/bomnipotent_client${extension}`;
   console.log(`Downloading from URL: ${url}`);
-  // const clientPath: string = await toolcache.downloadTool(url);
+  const clientPath: string = await toolcache.downloadTool(url);
 
-  // console.log(`Adding "${clientPath}" to the PATH`);
-  // core.addPath(clientPath)
+  console.log(`Adding "${clientPath}" to the PATH`);
+  core.addPath(clientPath);
 
   // TODO: Actually install the version of the software here.
   // core.setOutput("version", versionToInstall);
-} catch (error) {
-  core.setFailed((error as Error).message);
 }
+
+async function run(): Promise<void> {
+  try {
+    await setupClient();
+  } catch (error) {
+    core.setFailed((error as Error).message);
+  }
+}
+
+run();
