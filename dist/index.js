@@ -28226,8 +28226,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(8402));
+const fs = __importStar(__nccwpck_require__(9896));
+const io = __importStar(__nccwpck_require__(8192));
 const path = __importStar(__nccwpck_require__(6928));
 const toolcache = __importStar(__nccwpck_require__(4430));
+async function persistClient(downloadPath, os) {
+    const runnerTemp = process.env['RUNNER_TEMP'];
+    const stableDir = path.join(runnerTemp, 'bomnipotent');
+    let stablePath = path.join(stableDir, 'bomnipotent_client');
+    if (os === 'windows') {
+        stablePath = path.join(stableDir, 'bomnipotent_client.exe');
+    }
+    else {
+        // On Unix systems, we need to make the binary executable
+        fs.chmodSync(stablePath, 0o755);
+    }
+    await io.mkdirP(stableDir);
+    await io.cp(downloadPath, stablePath, { force: true });
+    console.log(`Adding "${stableDir}" to the PATH`);
+    core.addPath(stableDir);
+}
 async function setupClient() {
     const versionToInstall = core.getInput('version');
     console.log(`Installing ${versionToInstall}!`);
@@ -28248,11 +28266,8 @@ async function setupClient() {
     const extension = os === 'windows' ? '.exe' : '';
     const url = `https://www.bomnipotent.de/downloads/raw/${versionToInstall}/${os}/bomnipotent_client${extension}`;
     console.log(`Downloading from URL: ${url}`);
-    const clientPath = await toolcache.downloadTool(url);
-    console.log(`Adding "${clientPath}" to the PATH`);
-    core.addPath(clientPath);
-    console.log(`Adding "${path.dirname(clientPath)}" to the PATH`);
-    core.addPath(path.dirname(clientPath));
+    const downloadPath = await toolcache.downloadTool(url);
+    await persistClient(downloadPath, os);
 }
 async function run() {
     try {

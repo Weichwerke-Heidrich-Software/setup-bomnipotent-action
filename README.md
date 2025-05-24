@@ -34,7 +34,15 @@ jobs:
           version: '0.5.0' # Omit this argument to use the latest version
 
       - name: Display the BOMnipotent Client version
-        run: bomnipotent_client --version
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            echo "On Windows, the executable ends on .exe."
+            bomnipotent_client.exe --version
+          else
+            echo "On Unix, the file is already marked as executable."
+            bomnipotent_client --version
+          fi
+        shell: bash
 ```
 
 ## License

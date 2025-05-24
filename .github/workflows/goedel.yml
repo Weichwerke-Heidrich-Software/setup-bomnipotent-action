@@ -15,7 +15,13 @@ jobs:
         uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@installing-client
 
       - name: Display the latest BOMnipotent Client version
-        run: bomnipotent_client --version
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            bomnipotent_client.exe --version
+          else
+            bomnipotent_client --version
+          fi
+        shell: bash
 
       - name: Setup specific version of BOMnipotent Client
         id: setup-specific
@@ -24,4 +30,10 @@ jobs:
           version: '0.4.2'
 
       - name: Display the specific BOMnipotent Client version
-        run: bomnipotent_client --version
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            bomnipotent_client.exe --version
+          else
+            bomnipotent_client --version
+          fi
+        shell: bash
