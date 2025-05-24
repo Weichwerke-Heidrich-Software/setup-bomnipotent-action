@@ -25676,8 +25676,11 @@ const core = __importStar(__nccwpck_require__(8402));
 try {
     const versionToInstall = core.getInput('version');
     console.log(`Installing ${versionToInstall}!`);
-    const os = process.platform;
+    let os = process.platform;
     console.log(`Running on OS: ${os}`);
+    if (os === 'linux') {
+        os = 'linux-musl';
+    }
     const extension = os === 'win32' ? '.exe' : '';
     const url = `https://www.bomnipotent.de/downloads/raw/${versionToInstall}/${os}/bomnipotent_client${extension}`;
     console.log(`Downloading from URL: ${url}`);
