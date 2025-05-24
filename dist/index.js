@@ -28252,7 +28252,7 @@ async function persistClient(downloadPath, os) {
 }
 async function setupClient() {
     let versionToInstall = core.getInput('version');
-    if (!versionToInstall.startsWith('v')) {
+    if (versionToInstall !== 'latest' && !versionToInstall.startsWith('v')) {
         versionToInstall = `v${versionToInstall}`;
     }
     console.log(`Installing ${versionToInstall}.`);

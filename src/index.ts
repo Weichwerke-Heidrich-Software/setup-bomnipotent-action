@@ -28,7 +28,7 @@ async function persistClient(downloadPath: string, os: string): Promise<void> {
 
 async function setupClient(): Promise<void> {
   let versionToInstall: string = core.getInput('version');
-  if (!versionToInstall.startsWith('v')) {
+  if (versionToInstall !== 'latest' && !versionToInstall.startsWith('v')) {
     versionToInstall = `v${versionToInstall}`;
   }
   console.log(`Installing ${versionToInstall}.`);
