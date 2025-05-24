@@ -28217,14 +28217,25 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const child_process_1 = __nccwpck_require__(5317);
 const core = __importStar(__nccwpck_require__(8402));
 const fs = __importStar(__nccwpck_require__(9896));
 const io = __importStar(__nccwpck_require__(8192));
@@ -28249,6 +28260,59 @@ async function persistClient(downloadPath, os) {
     }
     console.log(`Adding "${stableDir}" to the PATH`);
     core.addPath(stableDir);
+    return stablePath;
+}
+function execCommand(command) {
+    try {
+        (0, child_process_1.execSync)(command, { stdio: 'inherit' });
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}`);
+        }
+        else {
+            console.error(`Sadly, BOMnipotent encountered a critical error:\n${String(error)}`);
+        }
+        process.exit(1);
+    }
+}
+function storeSessionData(execPath) {
+    let dataToStore = '';
+    const domain = core.getInput('domain');
+    if (domain) {
+        dataToStore += `--domain=${domain} `;
+    }
+    const user = core.getInput('user');
+    if (user) {
+        dataToStore += `--email=${user} `;
+    }
+    const secret_key = core.getInput('secret_key');
+    if (secret_key) {
+        const runnerTemp = process.env['RUNNER_TEMP'];
+        const stableDir = path.join(runnerTemp, 'bomnipotent');
+        const secretKeyPath = path.join(stableDir, 'secret.key');
+        fs.writeFileSync(secretKeyPath, secret_key);
+        dataToStore += `--secret-key=${secretKeyPath} `;
+    }
+    if (dataToStore === '') {
+        console.log('No session data to store.');
+        return;
+    }
+    else {
+        console.log(`Storing session data: ${dataToStore}`);
+    }
+    const command = `${execPath} ${dataToStore} session login`;
+    execCommand(command);
+}
+function verifySession(execPath) {
+    const domain = core.getInput('domain');
+    if (!domain) {
+        console.log('No domain provided, skipping session verification.');
+        return;
+    }
+    const command = `${execPath} health`;
+    console.log(`Verifying session.`);
+    execCommand(command);
 }
 async function setupClient() {
     let versionToInstall = core.getInput('version');
@@ -28274,7 +28338,11 @@ async function setupClient() {
     const url = `https://www.bomnipotent.de/downloads/raw/${versionToInstall}/${os}/bomnipotent_client${extension}`;
     console.log(`Downloading from URL: ${url}`);
     const downloadPath = await toolcache.downloadTool(url);
-    await persistClient(downloadPath, os);
+    const execPath = await persistClient(downloadPath, os);
+    storeSessionData(execPath);
+    if (core.getInput('verify_session') === 'true') {
+        verifySession(execPath);
+    }
 }
 async function run() {
     try {

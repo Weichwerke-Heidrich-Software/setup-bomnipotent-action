@@ -13,6 +13,15 @@ cd "$(git rev-parse --show-toplevel)"
 
 ncc build src/index.ts -o dist --license licenses.txt
 
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$branch" != "main" ]; then
+    repo_name=$(basename "$(git rev-parse --show-toplevel)")
+    action_path="Weichwerke-Heidrich-Software/$repo_name"
+    for file in .github/workflows/*.yml; do
+        sed -i "s:$action_path@.*:$action_path@$branch:g" "$file"
+    done
+fi
+
 commig_message=$1
 if [ -z "$commig_message" ]; then
     default_message="Updating compiled files."

@@ -1,10 +1,11 @@
+import { execSync } from 'child_process';
 import * as core from '@actions/core';
 import * as fs from 'fs';
 import * as io from '@actions/io';
 import * as path from 'path';
 import * as toolcache from '@actions/tool-cache';
 
-async function persistClient(downloadPath: string, os: string): Promise<void> {
+async function persistClient(downloadPath: string, os: string): Promise<string> {
   const runnerTemp = process.env['RUNNER_TEMP']!;
   const stableDir = path.join(runnerTemp, 'bomnipotent');
   let stablePath;
@@ -24,6 +25,65 @@ async function persistClient(downloadPath: string, os: string): Promise<void> {
 
   console.log(`Adding "${stableDir}" to the PATH`);
   core.addPath(stableDir);
+
+  return stablePath;
+}
+
+function execCommand(command: string): void {
+  try {
+    execSync(command, { stdio: 'inherit' });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`Sadly, BOMnipotent encountered a critical error:\n${error.message}`);
+    } else {
+      console.error(`Sadly, BOMnipotent encountered a critical error:\n${String(error)}`);
+    }
+    process.exit(1);
+  }
+}
+
+function storeSessionData(execPath: string): void {
+  let dataToStore: string = '';
+
+  const domain = core.getInput('domain');
+  if (domain) {
+    dataToStore += `--domain=${domain} `;
+  }
+
+  const user = core.getInput('user');
+  if (user) {
+    dataToStore += `--email=${user} `;
+  }
+
+  const secret_key = core.getInput('secret_key');
+  if (secret_key) {
+    const runnerTemp = process.env['RUNNER_TEMP']!;
+    const stableDir = path.join(runnerTemp, 'bomnipotent');
+    const secretKeyPath = path.join(stableDir, 'secret.key');
+    fs.writeFileSync(secretKeyPath, secret_key);
+    dataToStore += `--secret-key=${secretKeyPath} `;
+  }
+
+  if (dataToStore === '') {
+    console.log('No session data to store.');
+    return;
+  } else {
+    console.log(`Storing session data: ${dataToStore}`);
+  }
+
+  const command: string = `${execPath} ${dataToStore} session login`;
+  execCommand(command);
+}
+
+function verifySession(execPath: string): void {
+  const domain = core.getInput('domain');
+  if (!domain) {
+    console.log('No domain provided, skipping session verification.');
+    return;
+  }
+  const command: string = `${execPath} health`;
+  console.log(`Verifying session.`);
+  execCommand(command);
 }
 
 async function setupClient(): Promise<void> {
@@ -50,7 +110,11 @@ async function setupClient(): Promise<void> {
   console.log(`Downloading from URL: ${url}`);
   const downloadPath: string = await toolcache.downloadTool(url);
 
-  await persistClient(downloadPath, os);
+  const execPath = await persistClient(downloadPath, os);
+  storeSessionData(execPath);
+  if (core.getInput('verify_session') === 'true') {
+    verifySession(execPath);
+  }
 }
 
 async function run(): Promise<void> {
