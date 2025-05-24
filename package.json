@@ -12,7 +12,8 @@
     "@actions/github": "^6.0.1"
   },
   "devDependencies": {
-    "typescript": "^4.5.4"
+    "@types/node": "^22.15.21",
+    "typescript": "^4.9.5"
   },
   "engines": {
     "node": ">=12.x"

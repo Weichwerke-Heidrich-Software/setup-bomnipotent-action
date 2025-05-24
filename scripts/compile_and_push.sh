@@ -11,7 +11,7 @@ fi
 
 cd "$(git rev-parse --show-toplevel)"
 
-ncc build src/index.js -o dist --license licenses.txt
+ncc build src/index.ts -o dist --license licenses.txt
 
 commig_message=$1
 if [ -z "$commig_message" ]; then
