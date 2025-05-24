@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import * as path from 'path';
 import * as toolcache from '@actions/tool-cache';
 
 async function setupClient(): Promise<void> {
@@ -24,6 +25,9 @@ async function setupClient(): Promise<void> {
 
   console.log(`Adding "${clientPath}" to the PATH`);
   core.addPath(clientPath);
+
+  console.log(`Adding "${path.dirname(clientPath)}" to the PATH`);
+  core.addPath(path.dirname(clientPath));
 }
 
 async function run(): Promise<void> {

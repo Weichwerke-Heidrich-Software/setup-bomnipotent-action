@@ -28226,6 +28226,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(8402));
+const path = __importStar(__nccwpck_require__(6928));
 const toolcache = __importStar(__nccwpck_require__(4430));
 async function setupClient() {
     const versionToInstall = core.getInput('version');
@@ -28250,6 +28251,8 @@ async function setupClient() {
     const clientPath = await toolcache.downloadTool(url);
     console.log(`Adding "${clientPath}" to the PATH`);
     core.addPath(clientPath);
+    console.log(`Adding "${path.dirname(clientPath)}" to the PATH`);
+    core.addPath(path.dirname(clientPath));
 }
 async function run() {
     try {
