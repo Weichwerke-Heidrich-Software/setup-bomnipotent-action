@@ -11,14 +11,15 @@ fi
 
 cd "$(git rev-parse --show-toplevel)"
 
-ncc build src/index.js -o dist/index.js --license licenses.txt
+ncc build src/index.js -o dist --license licenses.txt
 
 commig_message=$1
 if [ -z "$commig_message" ]; then
-    echo "No commit message provided. Shall I use a default message?"
+    default_message="Update compiled files"
+    echo "No commit message provided. Shall I use a default message \"$default_message\"?"
     read -p "Enter 'y' for yes or 'n' for no: " answer
     if [ "$answer" == "y" ]; then
-        commig_message="Updating compiled files."
+        commig_message=$default_message
     else
         echo "Exiting without committing."
         exit 1
