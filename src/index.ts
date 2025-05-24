@@ -9,9 +9,15 @@ try {
   console.log(`Running on OS: ${os}`);
   if (os === 'linux') {
     os = 'linux-musl';
+  } else if (os === 'win32') {
+    os = 'windows';
+  } else if (os === 'darwin') {
+    os = 'macos';
+  } else {
+    throw new Error(`Unsupported OS: ${os}`);
   }
 
-  const extension: string = os === 'win32' ? '.exe' : '';
+  const extension: string = os === 'windows' ? '.exe' : '';
   const url: string = `https://www.bomnipotent.de/downloads/raw/${versionToInstall}/${os}/bomnipotent_client${extension}`;
   console.log(`Downloading from URL: ${url}`);
   // const clientPath: string = await toolcache.downloadTool(url);
