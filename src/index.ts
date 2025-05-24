@@ -67,6 +67,8 @@ function storeSessionData(execPath: string): void {
   if (dataToStore === '') {
     console.log('No session data to store.');
     return;
+  } else {
+    console.log(`Storing session data: ${dataToStore}`);
   }
 
   const command: string = `${execPath} ${dataToStore} session login`;

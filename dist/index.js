@@ -28296,6 +28296,9 @@ function storeSessionData(execPath) {
         console.log('No session data to store.');
         return;
     }
+    else {
+        console.log(`Storing session data: ${dataToStore}`);
+    }
     const command = `${execPath} ${dataToStore} session login`;
     execCommand(command);
 }
