@@ -112,7 +112,7 @@ async function setupClient(): Promise<void> {
 
   const execPath = await persistClient(downloadPath, os);
   storeSessionData(execPath);
-  if (core.getInput('verify_session') === 'true') {
+  if (core.getInput('verify-session') === 'true') {
     verifySession(execPath);
   }
 }

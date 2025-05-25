@@ -15,7 +15,8 @@ To use this action, you need to specify the version of the software you want to 
 - `domain`: *(Optional but recommended)* The domain of the BOMnipotent Server instance you primarily which to talk to.
 - `user`: *(Optional)* The username of a robot user registered at the BOMnipotent Server.
 - `secret_key`: *(Optional)* The secret key belonging to the username. Mke it available to your pipeline via your repo → Settings → Secrets and variables → Actions → New repository secret.
-- `verify_session`: *(Optional and not recommended)* If set to "false" (or some other string that is not "true"), this skips the verification that the entered session data is valid.
+- `log-level`: *(Optional)* Specify the log level on which BOMnipotent Client communicates with you. Valid values are 'error', 'warn', 'info' (default), 'debug' and 'trace'.
+- `verify-session`: *(Optional and not recommended)* If set to "false" (or some other string that is not "true"), this skips the verification that the entered session data is valid.
 - `version`: *(Optional and not recommended)* The version of the software to install. Defaults to 'latest'.
 
 ## Example Usage
@@ -38,6 +39,7 @@ jobs:
           domain: 'https://bomnipotent.<target-domain>'
           user: 'CI-CD@<your-domain>'
           secret_key: ${{ secrets.CLIENT_SECRET_KEY }} # You need to set this up in your action secrets.
+          log-level: 'debug' # If you feel like seeing more output.
           version: '0.5.0' # Omit this argument to use the latest version (recommended).
 
       - name: Use BOMnipotent Client in subsequent actions

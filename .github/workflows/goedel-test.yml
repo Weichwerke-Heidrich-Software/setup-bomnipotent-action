@@ -12,11 +12,12 @@ jobs:
     steps:
       - name: Setup latest version of BOMnipotent Client and store session data
         id: setup-latest
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@store-log-level
         with:
           domain: 'https://bomnipotent.wwh-soft.com'
           user: 'wwh_soft_robot'
           secret_key: ${{ secrets.CLIENT_SECRET_KEY }}
+          log-level: 'debug'
 
       - name: Display the session data
         run: |
@@ -29,10 +30,10 @@ jobs:
 
       - name: Setup specific version of BOMnipotent Client
         id: setup-specific
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@store-log-level
         with:
           version: '0.4.2'
-          verify_session: 'false'
+          verify-session: 'false'
 
       - name: Display the BOMnipotent Client version
         run: |

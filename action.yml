@@ -13,7 +13,12 @@ inputs:
       Specify the username of a robot user registered at the BOMnipotent Server you are targeting.
     required: false
     default: ''
-  verify_session:
+  log-level:
+    description: |-
+      Specify the log level on which BOMnipotent Client communicates with you. Valid values are 'error', 'warn', 'info' (default), 'debug' and 'trace'.
+    required: false
+    default: ''
+  verify-session:
     description: |-
       If set to false, this skips the verification that the entered session data is valid.
     required: false
