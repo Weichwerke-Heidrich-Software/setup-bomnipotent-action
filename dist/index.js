@@ -28286,7 +28286,11 @@ function storeSessionData(execPath) {
     if (user) {
         dataToStore += `--email=${user} `;
     }
-    const secret_key = core.getInput('secret_key');
+    const log_level = core.getInput('log-level');
+    if (log_level) {
+        dataToStore += `--log-level=${log_level} `;
+    }
+    const secret_key = core.getInput('secret-key');
     if (secret_key) {
         const runnerTemp = process.env['RUNNER_TEMP'];
         const stableDir = path.join(runnerTemp, 'bomnipotent');
