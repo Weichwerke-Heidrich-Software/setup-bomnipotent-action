@@ -55,7 +55,12 @@ function storeSessionData(execPath: string): void {
     dataToStore += `--email=${user} `;
   }
 
-  const secret_key = core.getInput('secret_key');
+  const log_level = core.getInput('log-level');
+  if (log_level) {
+    dataToStore += `--log-level=${log_level} `;
+  }
+
+  const secret_key = core.getInput('secret-key');
   if (secret_key) {
     const runnerTemp = process.env['RUNNER_TEMP']!;
     const stableDir = path.join(runnerTemp, 'bomnipotent');
@@ -112,7 +117,7 @@ async function setupClient(): Promise<void> {
 
   const execPath = await persistClient(downloadPath, os);
   storeSessionData(execPath);
-  if (core.getInput('verify_session') === 'true') {
+  if (core.getInput('verify-session') === 'true') {
     verifySession(execPath);
   }
 }

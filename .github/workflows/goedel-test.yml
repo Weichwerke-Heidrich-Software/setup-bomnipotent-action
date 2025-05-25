@@ -16,7 +16,8 @@ jobs:
         with:
           domain: 'https://bomnipotent.wwh-soft.com'
           user: 'wwh_soft_robot'
-          secret_key: ${{ secrets.CLIENT_SECRET_KEY }}
+          secret-key: ${{ secrets.CLIENT_SECRET_KEY }}
+          log-level: 'debug'
 
       - name: Display the session data
         run: |
@@ -32,7 +33,7 @@ jobs:
         uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
         with:
           version: '0.4.2'
-          verify_session: 'false'
+          verify-session: 'false'
 
       - name: Display the BOMnipotent Client version
         run: |
