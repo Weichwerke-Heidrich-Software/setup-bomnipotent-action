@@ -38,7 +38,7 @@ jobs:
         with:
           domain: 'https://bomnipotent.<target-domain>'
           user: 'CI-CD@<your-domain>'
-          secret-key: ${{ secrets.CLIENT_secret-key }} # You need to set this up in your action secrets.
+          secret-key: ${{ secrets.CLIENT_SECRET_KEY }} # You need to set this up in your action secrets.
           log-level: 'debug' # If you feel like seeing more output.
           version: '0.5.0' # Omit this argument to use the latest version (recommended).
 

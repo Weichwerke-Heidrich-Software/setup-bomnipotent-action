@@ -16,7 +16,7 @@ jobs:
         with:
           domain: 'https://bomnipotent.wwh-soft.com'
           user: 'wwh_soft_robot'
-          secret-key: ${{ secrets.CLIENT_secret-key }}
+          secret-key: ${{ secrets.CLIENT_SECRET_KEY }}
           log-level: 'debug'
 
       - name: Display the session data
