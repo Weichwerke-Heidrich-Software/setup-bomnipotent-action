@@ -28,12 +28,12 @@ jobs:
           fi
         shell: bash
 
-      - name: Check if user exists
+      - name: List BOMs
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            bomnipotent_client.exe user exists --user wwh_soft_robot
+            bomnipotent_client.exe bom list
           else
-            bomnipotent_client user exists --user wwh_soft_robot
+            bomnipotent_client bom list
           fi
         shell: bash
 
