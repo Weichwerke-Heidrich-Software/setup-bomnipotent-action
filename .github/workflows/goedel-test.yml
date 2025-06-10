@@ -28,6 +28,15 @@ jobs:
           fi
         shell: bash
 
+      - name: List BOMs
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            bomnipotent_client.exe bom list
+          else
+            bomnipotent_client bom list
+          fi
+        shell: bash
+
       - name: Setup specific version of BOMnipotent Client
         id: setup-specific
         uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
