@@ -19,6 +19,8 @@ To use this action, you need to specify the version of the software you want to 
 - `verify-session`: *(Optional and not recommended)* If set to "false" (or some other string that is not "true"), this skips the verification that the entered session data is valid.
 - `version`: *(Optional and not recommended)* The version of the software to install. Defaults to 'latest'.
 
+> Beginning with version 1.3.0 of this action, the BOMnipotent version needs to be 0.6.0 or higher.
+
 ## Example Usage
 
 ```yaml

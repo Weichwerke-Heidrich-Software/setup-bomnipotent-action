@@ -52,7 +52,7 @@ function storeSessionData(execPath: string): void {
 
   const user = core.getInput('user');
   if (user) {
-    dataToStore += `--email=${user} `;
+    dataToStore += `--user=${user} `;
   }
 
   const log_level = core.getInput('log-level');

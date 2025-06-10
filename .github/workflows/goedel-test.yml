@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Setup latest version of BOMnipotent Client and store session data
         id: setup-latest
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@using-v0.6.0
         with:
           domain: 'https://bomnipotent-test.wwh-soft.com:62443'
           user: 'wwh_soft_robot'
@@ -28,9 +28,18 @@ jobs:
           fi
         shell: bash
 
+      - name: Check if user exists
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            bomnipotent_client.exe user exists --user wwh_soft_robot
+          else
+            bomnipotent_client user exists --user wwh_soft_robot
+          fi
+        shell: bash
+
       - name: Setup specific version of BOMnipotent Client
         id: setup-specific
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@using-v0.6.0
         with:
           version: '0.4.2'
           verify-session: 'false'
