@@ -41,7 +41,7 @@ jobs:
         id: setup-specific
         uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
         with:
-          version: '0.4.2'
+          version: '1.0.0'
           verify-session: 'false'
 
       - name: Display the BOMnipotent Client version
@@ -52,3 +52,10 @@ jobs:
             bomnipotent_client --version
           fi
         shell: bash
+
+      - name: Setup the same specific version of BOMnipotent Client again
+        id: setup-specific-again
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
+        with:
+          version: '1.0.0'
+          verify-session: 'false'
