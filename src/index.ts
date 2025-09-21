@@ -5,26 +5,45 @@ import * as io from '@actions/io';
 import * as path from 'path';
 import * as toolcache from '@actions/tool-cache';
 
-async function persistClient(downloadPath: string, os: string): Promise<string> {
+function executableName(): string {
+  return process.platform === 'win32' ? 'bomnipotent_client.exe' : 'bomnipotent_client';
+}
+
+function getInstalledVersion(): string {
+  try {
+    const versionOutput = execSync(`${executableName()} --version`, { encoding: 'utf-8' }).trim();
+    const match = versionOutput.match(/bomnipotent_client (\S+)/);
+    if (match) {
+      return match[1];
+    }
+    return '';
+  } catch {
+    return '';
+  }
+}
+
+async function persistClient(downloadPath: string): Promise<string> {
   const runnerTemp = process.env['RUNNER_TEMP']!;
   const stableDir = path.join(runnerTemp, 'bomnipotent');
-  let stablePath;
-  if (os === 'windows') {
-    stablePath = path.join(stableDir, 'bomnipotent_client.exe');
-  } else {
-    stablePath = path.join(stableDir, 'bomnipotent_client');
-  }
+  const stablePath = path.join(stableDir, executableName());
   await io.mkdirP(stableDir);
   console.log(`Moving client to: ${stablePath}`);
   await io.cp(downloadPath, stablePath, { force: true });
 
-  if (os !== 'windows') {
+  if (process.platform !== 'win32') {
     // On Unix systems, we need to make the binary executable
     fs.chmodSync(stablePath, 0o755);
   }
 
   console.log(`Adding "${stableDir}" to the PATH`);
   core.addPath(stableDir);
+
+  const version = getInstalledVersion();
+  if (version) {
+    console.log(`Successfully installed BOMnipotent Client version ${version}`);
+  } else {
+    console.log('Error: Could not determine installed BOMnipotent Client version.');
+  }
 
   return stablePath;
 }
@@ -42,7 +61,7 @@ function execCommand(command: string): void {
   }
 }
 
-function storeSessionData(execPath: string): void {
+function storeSessionData(): void {
   let dataToStore: string = '';
 
   const domain = core.getInput('domain');
@@ -76,21 +95,24 @@ function storeSessionData(execPath: string): void {
     console.log(`Storing session data: ${dataToStore}`);
   }
 
+  const execPath: string = executableName();
   const command: string = `${execPath} ${dataToStore} session login`;
   execCommand(command);
 }
 
-function verifySession(execPath: string): void {
+function verifySession(): void {
   const domain = core.getInput('domain');
   const user = core.getInput('user');
   const secret_key = core.getInput('secret-key');
-  
+
   if (!domain) {
     console.log('No domain provided, skipping session verification.');
     return;
   } else {
     console.log(`Verifying session.`);
   }
+
+  const execPath: string = executableName();
 
   if (user && secret_key) {
     console.log('Checking that user and secret key are valid.');
@@ -108,6 +130,13 @@ async function setupClient(): Promise<void> {
   if (versionToInstall !== 'latest' && !versionToInstall.startsWith('v')) {
     versionToInstall = `v${versionToInstall}`;
   }
+
+  const installedVersion = getInstalledVersion();
+  if (`v${installedVersion}` === versionToInstall) {
+    console.log(`BOMnipotent Client version ${installedVersion} is already installed.`);
+    return;
+  }
+
   console.log(`Installing ${versionToInstall}.`);
 
   let os: string = process.platform;
@@ -127,16 +156,16 @@ async function setupClient(): Promise<void> {
   console.log(`Downloading from URL: ${url}`);
   const downloadPath: string = await toolcache.downloadTool(url);
 
-  const execPath = await persistClient(downloadPath, os);
-  storeSessionData(execPath);
-  if (core.getInput('verify-session') === 'true') {
-    verifySession(execPath);
-  }
+  await persistClient(downloadPath);
 }
 
 async function run(): Promise<void> {
   try {
     await setupClient();
+    storeSessionData();
+    if (core.getInput('verify-session') === 'true') {
+      verifySession();
+    }
   } catch (error) {
     core.setFailed((error as Error).message);
   }
