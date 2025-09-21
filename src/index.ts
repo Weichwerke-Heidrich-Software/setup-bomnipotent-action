@@ -82,19 +82,25 @@ function storeSessionData(execPath: string): void {
 
 function verifySession(execPath: string): void {
   const domain = core.getInput('domain');
+  const user = core.getInput('user');
+  const secret_key = core.getInput('secret-key');
+  
   if (!domain) {
     console.log('No domain provided, skipping session verification.');
     return;
+  } else {
+    console.log(`Verifying session.`);
   }
-  const user = core.getInput('user');
-  const secret_key = core.getInput('secret-key');
 
-  let command: string = `${execPath} health`;
   if (user && secret_key) {
-    command = `${execPath} whoami`;
+    console.log('Checking that user and secret key are valid.');
+    let command: string = `${execPath} whoami`;
+    execCommand(command);
+  } else {
+    console.log('Checking that the service is reachable.');
+    let command: string = `${execPath} health`;
+    execCommand(command);
   }
-  console.log(`Verifying session.`);
-  execCommand(command);
 }
 
 async function setupClient(): Promise<void> {
