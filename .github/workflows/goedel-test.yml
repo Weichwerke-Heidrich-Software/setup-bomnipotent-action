@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Setup latest version of BOMnipotent Client and store session data
         id: setup-latest
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@verify-via-whoami
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
         with:
           domain: 'https://bomnipotent-test.wwh-soft.com:62443'
           user: 'wwh_soft_robot'
@@ -39,7 +39,7 @@ jobs:
 
       - name: Setup specific version of BOMnipotent Client
         id: setup-specific
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@verify-via-whoami
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
         with:
           version: '1.0.0'
           verify-session: 'false'
@@ -55,7 +55,7 @@ jobs:
 
       - name: Setup the same specific version of BOMnipotent Client again
         id: setup-specific-again
-        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@verify-via-whoami
+        uses: Weichwerke-Heidrich-Software/setup-bomnipotent-action@v1
         with:
           version: '1.0.0'
           verify-session: 'false'
