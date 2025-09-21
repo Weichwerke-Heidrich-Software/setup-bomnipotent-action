@@ -86,7 +86,13 @@ function verifySession(execPath: string): void {
     console.log('No domain provided, skipping session verification.');
     return;
   }
-  const command: string = `${execPath} health`;
+  const user = core.getInput('user');
+  const secret_key = core.getInput('secret-key');
+
+  let command: string = `${execPath} health`;
+  if (user && secret_key) {
+    command = `${execPath} whoami`;
+  }
   console.log(`Verifying session.`);
   execCommand(command);
 }
